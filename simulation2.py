@@ -12,10 +12,19 @@ class Cell:
 
     def foster(self):
         try:
-            field[self.x][self.y-1].newData = self.preData
-            field[self.x][self.y+1].newData = self.preData
-            field[self.x-1][self.y].newData = self.preData
-            field[self.x+1][self.y].newData = self.preData
+            field[self.y][self.x-1].newData = self.preData
+        except IndexError:
+            pass
+        try:
+            field[self.y][self.x+1].newData = self.preData
+        except IndexError:
+            pass
+        try:
+            field[self.y-1][self.x].newData = self.preData
+        except IndexError:
+            pass
+        try:
+            field[self.y+1][self.x].newData = self.preData
         except IndexError:
             pass
 
@@ -35,7 +44,7 @@ def explode():
 field = [[] for i in range(10)]
 for i in range(10):
     for j in range(10):
-        field[i].append(Cell(i,j))
+        field[i].append(Cell(j, i))
 
 #initial value
 while True:
@@ -43,13 +52,13 @@ while True:
     start1 = [random.randint(0,9), random.randint(0,9)]
 
     if start0 != start1:
-        field[start0[0]][start0[1]].newData = 0
-        field[start1[0]][start1[1]].newData = 1
+        field[start0[0]][start0[1]].preData = 0
+        field[start1[0]][start1[1]].preData = 1
         break
 
 #game
 while True:
-    command = input('n or <Enter> >> ')
+    command = input('q or Enter >> ')
     if command == 'q':
         print('Good Bye')
         break
