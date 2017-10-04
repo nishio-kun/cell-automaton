@@ -1,32 +1,39 @@
 import random
 
+def check_cell(num):
+    if num in [0, 1]:
+        return True
+    else:
+        return False
+
 class Cell:
     x = 0
     y = 0
     preData = '-'
     newData = '-'
 
-    def __init__(self, i, j):
-        self.x = i
-        self.y = j
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
 
     def foster(self):
-        try:
-            field[self.y][self.x-1].newData = self.preData
-        except IndexError:
-            pass
-        try:
-            field[self.y][self.x+1].newData = self.preData
-        except IndexError:
-            pass
-        try:
-            field[self.y-1][self.x].newData = self.preData
-        except IndexError:
-            pass
-        try:
-            field[self.y+1][self.x].newData = self.preData
-        except IndexError:
-            pass
+        if check_cell(self.preData):
+            try:
+                field[self.y][self.x-1].newData = self.preData
+            except IndexError:
+                pass
+            try:
+                field[self.y][self.x+1].newData = self.preData
+            except IndexError:
+                pass
+            try:
+                field[self.y-1][self.x].newData = self.preData
+            except IndexError:
+                pass
+            try:
+                field[self.y+1][self.x].newData = self.preData
+            except IndexError:
+                pass
 
     def pay_off(self):
         self.preData = self.newData
