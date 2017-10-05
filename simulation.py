@@ -55,6 +55,7 @@ for y in range(10):
     for x in range(10):
         field[y][x] = Cell(x,y)
 
+#initial value
 while True:
     start0 = [random.randint(0,9), random.randint(0,9)]
     start1 = [random.randint(0,9), random.randint(0,9)]
@@ -78,6 +79,7 @@ while True:
                 field[y][x].grow_south()
                 field[y][x].grow_west()
                 field[y][x].grow_east()
+
         print()
         for y in range(10):
             print(' ', end='')
@@ -85,6 +87,7 @@ while True:
                 print(str(field[y][x].preData) + ' ', end='')
             print()
         print()
+
         for y in range(10):
             for x in range(10):
                 field[y][x].pay_off()
