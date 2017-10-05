@@ -52,14 +52,16 @@ class Cell:
         self.preData = self.newData
 
 #make field
-field = [[] for i in range(10)]
+field = [['' for n in range(10)] for m in range(10)]
 for y in range(10):
     for x in range(10):
-        field[y].append(Cell(x,y))
+        field[y][x] = Cell(x,y)
 
 #initial value
 field[1][1].preData = 0
+field[1][1].newData = 0
 field[8][8].preData = 1
+field[8][8].newData = 1
 '''
 while True:
     start0 = [random.randint(0,9), random.randint(0,9)]
@@ -88,7 +90,7 @@ while True:
                 #field[y][x].grow_south()
                 field[y][x].grow_west()
                 #field[y][x].grow_east()
-                print(str(field[y][x].newData) + ' ', end='')
+                print(str(field[y][x].preData) + ' ', end='')
                 field[y][x].pay_off()
             print()
         print()
