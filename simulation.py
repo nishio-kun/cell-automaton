@@ -51,15 +51,22 @@ class Cell:
         self.preData = self.newData
 
 #make field
-field = [['' for n in range(10)] for m in range(10)]
-for y in range(10):
-    for x in range(10):
+while True:
+    try:
+        size = int(input('set size (recommend: 10 ~ 30) >> '))
+        break
+    except ValueError:
+        print('please input number')
+
+field = [['' for n in range(size)] for m in range(size)]
+for y in range(size):
+    for x in range(size):
         field[y][x] = Cell(x,y)
 
 #initial value
 while True:
-    start0 = [random.randint(0,9), random.randint(0,9)]
-    start1 = [random.randint(0,9), random.randint(0,9)]
+    start0 = [random.randint(0,size), random.randint(0,size)]
+    start1 = [random.randint(0,size), random.randint(0,size)]
 
     if start0 != start1:
         field[start0[1]][start0[0]].preData = 0
@@ -76,21 +83,21 @@ while True:
     elif command == 'balus':
         bomb.balus(field, command)
     else:
-        for y in range(10):
-            for x in range(10):
+        for y in range(size):
+            for x in range(size):
                 field[y][x].grow_north()
                 field[y][x].grow_south()
                 field[y][x].grow_west()
                 field[y][x].grow_east()
         bomb.explode(field)
         print()
-        for y in range(10):
+        for y in range(size):
             print(' ', end='')
-            for x in range(10):
+            for x in range(size):
                 print(str(field[y][x].preData) + ' ', end='')
             print()
         print()
 
-        for y in range(10):
-            for x in range(10):
+        for y in range(size):
+            for x in range(size):
                 field[y][x].pay_off()
