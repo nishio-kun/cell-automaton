@@ -1,11 +1,6 @@
 import random
+from check_cell import check_cell
 import bomb
-
-def check_cell(num):
-    if num in [0, 1]:
-        return True
-    else:
-        return False
 
 class Cell:
     x = 0
