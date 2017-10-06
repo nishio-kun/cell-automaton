@@ -1,98 +1,142 @@
 import random
-import bomb
-import block
 
-def check_cell(num):
-    if num in [0, 1]:
-        return True
-    else:
-        return False
+
+class Ether:
+    name = 'ether'
+    data = ' '
+
 
 class Cell:
+    name = 'newBornCell'
     x = 0
     y = 0
-    preData = '-'
-    newData = '-'
+    data = ''
 
-    def __init__(self, x, y):
+    def __init__(self, x, y, value):
         self.x = x
         self.y = y
+        self.data = value
 
-    def grow_north(self):
-        if check_cell(self.preData):
-            if y != 0:      #to stop the bomberman phenomeno
-                try:
-                    field[self.y-1][self.x].newData = self.preData
-                except IndexError:
-                    pass
+    def grow(self):
+        self.name = 'cell'
 
-    def grow_south(self):
-        if check_cell(self.preData):
-            try:
-                field[self.y+1][self.x].newData = self.preData
-            except IndexError:
-                pass
+    def move_north(self):
+        if field[y - 1][x].name == 'ether':
+            field[y - 1][x] = Cell(x, y - 1, self.data) 
+            field[y][x] = Ether()
 
-    def grow_west(self):
-        if check_cell(self.preData):
-            if x != 0:
-                try:
-                    field[self.y][self.x-1].newData = self.preData
-                except IndexError:
-                    pass
+    def move_south(self):
+        if field[y + 1][x].name == 'ether':
+            field[y + 1][x] = Cell(x, y + 1, self.data) 
+            field[y][x] = Ether()
 
-    def grow_east(self):
-        if check_cell(self.preData):
-            try:
-                field[self.y][self.x+1].newData = self.preData
-            except IndexError:
-                pass
+    def move_west(self):
+        if field[y][x - 1].name == 'ether':
+            field[y][x - 1] = Cell(x - 1, y, self.data) 
+            field[y][x] = Ether()
 
-    def pay_off(self):
-        self.preData = self.newData
+    def move_east(self):
+        if field[y][x + 1].name == 'ether':
+            field[y][x + 1] = Cell(x + 1, y, self.data) 
+            field[y][x] = Ether()
+
+    def divide_north(self):
+        if field[y - 1][x].name == 'ether':
+            field[y - 1][x] = Cell(x, y - 1, self.data) 
+
+    def divide_south(self):
+        if field[y + 1][x].name == 'ether':
+            field[y + 1][x] = Cell(x, y + 1, self.data) 
+
+    def divide_west(self):
+        if field[y][x - 1].name == 'ether':
+            field[y][x - 1] = Cell(x - 1, y, self.data) 
+
+    def divide_east(self):
+        if field[y][x + 1].name == 'ether':
+            field[y][x + 1] = Cell(x + 1, y, self.data) 
+
+    def die(self):
+        mortalityRate = random.random()
+        if motalityRate >= 0.8:
+            field[y][x] = Ether()
+
+
+class Barrier:
+    name = 'barrier'
+    data = '+' 
+
 
 #make field
-field = [['' for n in range(10)] for m in range(10)]
-for y in range(10):
-    for x in range(10):
-        field[y][x] = Cell(x,y)
+while True:
+    try:
+        size = int(input('set size (recommend: 10 ~ 30) >> '))
+        wholeSize = size + 2
+        break
+    except ValueError:
+        print('please input number')
+
+field = [[Ether() for n in range(wholeSize)] for m in range(wholeSize)]
+
+for y in range(wholeSize):
+    if y in [0, wholeSize - 1]:
+        for x in range(wholeSize):
+            field[y][x] = Barrier()
+    else:
+        for x in [0, wholeSize - 1]:
+            field[y][x] = Barrier()
+
 
 #initial value
 while True:
-    start0 = [random.randint(0,9), random.randint(0,9)]
-    start1 = [random.randint(0,9), random.randint(0,9)]
+    start0 = [random.randint(1, wholeSize - 2), random.randint(1, wholeSize - 2)]
+    start1 = [random.randint(1, wholeSize - 2), random.randint(1, wholeSize - 2)]
 
     if start0 != start1:
-        field[start0[1]][start0[0]].preData = 0
-        field[start0[1]][start0[0]].newData = 0
-        field[start1[1]][start1[0]].preData = 1
-        field[start1[1]][start1[0]].newData = 1
+        field[start0[1]][start0[0]] = Cell(start0[0], start0[1], 0)
+        field[start1[1]][start1[0]] = Cell(start1[0], start1[1], 1)
         break
+
+
 
 #game
 while True:
     command = input('Enter or q >> ')
     if command == 'q':
         break
-    elif command == 'balus':
-        bomb.balus(field, command)
     else:
-        for y in range(10):
-            for x in range(10):
-                field[y][x].grow_north()
-                field[y][x].grow_south()
-                field[y][x].grow_west()
-                field[y][x].grow_east()
-        bomb.explode(field)
-        block.wall(field)
+        for y in range(wholeSize):
+            for x in range(wholeSize):
+                if field[y][x].name == 'cell':
+                    num = random.randint(0, 7)
+                    if num == 0:
+                        field[y][x].move_north()
+                    elif num == 1:
+                        field[y][x].move_south()
+                    elif num == 2:
+                        field[y][x].move_west()
+                    elif num == 3:
+                        field[y][x].move_east()
+                    elif num == 4:
+                        field[y][x].divide_north()
+                    elif num == 5:
+                        field[y][x].divide_south()
+                    elif num == 6:
+                        field[y][x].divide_west()
+                    elif num == 7:
+                        field[y][x].divide_east()
+                if field[y][x].name in ['cell', 'newBornCell']:
+                    field[y][x].die
+
         print()
-        for y in range(10):
+        for y in range(wholeSize):
             print(' ', end='')
-            for x in range(10):
-                print(str(field[y][x].preData) + ' ', end='')
+            for x in range(wholeSize):
+                print(str(field[y][x].data) + ' ', end='')
             print()
         print()
 
-        for y in range(10):
-            for x in range(10):
-                field[y][x].pay_off()
+        for y in range(wholeSize):
+            for x in range(wholeSize):
+                if field[y][x].name == 'newBornCell':
+                    field[y][x].grow()
