@@ -1,4 +1,5 @@
 import random
+import bomb
 
 def check_cell(num):
     if num in [0, 1]:
@@ -18,7 +19,7 @@ class Cell:
 
     def grow_north(self):
         if check_cell(self.preData):
-            if y != 0:
+            if y != 0:      #to stop the bomberman phenomeno
                 try:
                     field[self.y-1][self.x].newData = self.preData
                 except IndexError:
@@ -72,6 +73,8 @@ while True:
     command = input('Enter or q >> ')
     if command == 'q':
         break
+    elif command == 'balus':
+        bomb.balus(field, command)
     else:
         for y in range(10):
             for x in range(10):
@@ -79,7 +82,7 @@ while True:
                 field[y][x].grow_south()
                 field[y][x].grow_west()
                 field[y][x].grow_east()
-
+        bomb.explode(field)
         print()
         for y in range(10):
             print(' ', end='')
