@@ -1,49 +1,20 @@
 import random
-from element import Ether, Cell, Builder, Barrier
+from field import create_field, set_barrier_ether
+from initial_value import set_start_point
 
 
-#make field
-while True:
-    try:
-        size = int(input('set size (recommend: 10 ~ 30) >> '))
-        wholeSize = size + 2
-        break
-    except ValueError:
-        print('please input number')
+# set field
+field = create_field()
+wholeSize = len(field)
 
-field = [[Ether() for n in range(wholeSize)] for m in range(wholeSize)]
-
-for y in range(wholeSize):
-    if y in [0, wholeSize - 1]:
-        for x in range(wholeSize):
-            field[y][x] = Barrier()
-    else:
-        for x in [0, wholeSize - 1]:
-            field[y][x] = Barrier()
+set_barrier_ether(field, wholeSize)
 
 
-#initial value
-while True:
-    start0 = [random.randint(1, wholeSize - 2), random.randint(1, wholeSize - 2)]
-    start1 = [random.randint(1, wholeSize - 2), random.randint(1, wholeSize - 2)]
-    start5 = [random.randint(1, wholeSize - 2), random.randint(1, wholeSize - 2)]
-
-    #check overlap
-    startSpot = [start0, start1, start5]
-    startSpotUnique = []
-    for spot in startSpot:
-        if spot not in startSpotUnique:
-            startSpotUnique.append(spot)
-
-    if len(startSpotUnique) == 3: 
-        field[start0[1]][start0[0]] = Cell(start0[0], start0[1], 0)
-        field[start1[1]][start1[0]] = Cell(start1[0], start1[1], 1)
-        field[start5[1]][start5[0]] = Builder(start5[0], start5[1], 5)
-        break
+# set start point
+set_start_point(field, wholeSize)
 
 
-
-#game
+# main
 while True:
     command = input('Enter or q >> ')
     if command == 'q':
