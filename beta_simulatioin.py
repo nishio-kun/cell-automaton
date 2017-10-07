@@ -1,97 +1,5 @@
 import random
-
-
-class Ether:
-    name = 'ether'
-    data = ' '
-
-
-class Cell:
-    name = 'newBornCell'
-    x = 0
-    y = 0
-    data = ''
-
-    def __init__(self, x, y, value):
-        self.x = x
-        self.y = y
-        self.data = value
-
-    def grow(self):
-        self.name = 'cell'
-
-    def move_north(self):
-        if field[y - 1][x].name == 'ether':
-            field[y - 1][x] = Cell(x, y - 1, self.data) 
-            field[y][x] = Ether()
-
-    def move_south(self):
-        if field[y + 1][x].name == 'ether':
-            field[y + 1][x] = Cell(x, y + 1, self.data) 
-            field[y][x] = Ether()
-
-    def move_west(self):
-        if field[y][x - 1].name == 'ether':
-            field[y][x - 1] = Cell(x - 1, y, self.data) 
-            field[y][x] = Ether()
-
-    def move_east(self):
-        if field[y][x + 1].name == 'ether':
-            field[y][x + 1] = Cell(x + 1, y, self.data) 
-            field[y][x] = Ether()
-
-    def divide_north(self):
-        if field[y - 1][x].name == 'ether':
-            field[y - 1][x] = Cell(x, y - 1, self.data) 
-
-    def divide_south(self):
-        if field[y + 1][x].name == 'ether':
-            field[y + 1][x] = Cell(x, y + 1, self.data) 
-
-    def divide_west(self):
-        if field[y][x - 1].name == 'ether':
-            field[y][x - 1] = Cell(x - 1, y, self.data) 
-
-    def divide_east(self):
-        if field[y][x + 1].name == 'ether':
-            field[y][x + 1] = Cell(x + 1, y, self.data) 
-
-    def die(self):
-        mortalityRate = random.random()
-        if motalityRate >= 0.6:
-            field[y][x] = Ether()
-
-
-class Barrier:
-    name = 'barrier'
-    data = '+' 
-
-
-class Builder(Cell):
-    name = 'newBornBuilder'
-
-    def grow(self):
-        self.name = 'builder'
-
-    def move_north(self):
-        if field[y - 1][x].name == 'ether':
-            field[y - 1][x] = Builder(x, y - 1, self.data) 
-            field[y][x] = Barrier()
-
-    def move_south(self):
-        if field[y + 1][x].name == 'ether':
-            field[y + 1][x] = Builder(x, y + 1, self.data) 
-            field[y][x] = Barrier()
-
-    def move_west(self):
-        if field[y][x - 1].name == 'ether':
-            field[y][x - 1] = Builder(x - 1, y, self.data) 
-            field[y][x] = Barrier()
-
-    def move_east(self):
-        if field[y][x + 1].name == 'ether':
-            field[y][x + 1] = Builder(x + 1, y, self.data) 
-            field[y][x] = Barrier()
+from element import Ether, Cell, Builder, Barrier
 
 
 #make field
@@ -146,21 +54,21 @@ while True:
                 if field[y][x].name == 'cell':
                     num = random.randint(0, 7)
                     if num == 0:
-                        field[y][x].move_north()
+                        field[y][x].move_north(field)
                     elif num == 1:
-                        field[y][x].move_south()
+                        field[y][x].move_south(field)
                     elif num == 2:
-                        field[y][x].move_west()
+                        field[y][x].move_west(field)
                     elif num == 3:
-                        field[y][x].move_east()
+                        field[y][x].move_east(field)
                     elif num == 4:
-                        field[y][x].divide_north()
+                        field[y][x].divide_north(field)
                     elif num == 5:
-                        field[y][x].divide_south()
+                        field[y][x].divide_south(field)
                     elif num == 6:
-                        field[y][x].divide_west()
+                        field[y][x].divide_west(field)
                     elif num == 7:
-                        field[y][x].divide_east()
+                        field[y][x].divide_east(field)
                 if field[y][x].name in ['cell', 'newBornCell']:
                     field[y][x].die
                 if field[y][x].name == 'builder':
@@ -170,19 +78,19 @@ while True:
                         num = random.randint(0, 3)
                         if num == 0:
                             if field[y - 1][x].name == 'ether':
-                                field[y][x].move_north()
+                                field[y][x].move_north(field)
                                 break
                         elif num == 1:
                             if field[y + 1][x].name == 'ether':
-                                field[y][x].move_south()
+                                field[y][x].move_south(field)
                                 break
                         elif num == 2:
                             if field[y][x - 1].name == 'ether':
-                                field[y][x].move_west()
+                                field[y][x].move_west(field)
                                 break
                         elif num == 3:
                             if field[y][x + 1].name == 'ether':
-                                field[y][x].move_east()
+                                field[y][x].move_east(field)
                                 break
 
         print()
