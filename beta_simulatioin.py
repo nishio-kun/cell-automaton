@@ -164,15 +164,26 @@ while True:
                 if field[y][x].name in ['cell', 'newBornCell']:
                     field[y][x].die
                 if field[y][x].name == 'builder':
-                    num = random.randint(0, 3)
-                    if num == 0:
-                        field[y][x].move_north()
-                    elif num == 1:
-                        field[y][x].move_south()
-                    elif num == 2:
-                        field[y][x].move_west()
-                    elif num == 3:
-                        field[y][x].move_east()
+                    while True:
+                        if 'ether' not in [field[y - 1][x].name, field[y + 1][x].name, field[y][x - 1].name, field[y][x + 1].name]:
+                            break
+                        num = random.randint(0, 3)
+                        if num == 0:
+                            if field[y - 1][x].name == 'ether':
+                                field[y][x].move_north()
+                                break
+                        elif num == 1:
+                            if field[y + 1][x].name == 'ether':
+                                field[y][x].move_south()
+                                break
+                        elif num == 2:
+                            if field[y][x - 1].name == 'ether':
+                                field[y][x].move_west()
+                                break
+                        elif num == 3:
+                            if field[y][x + 1].name == 'ether':
+                                field[y][x].move_east()
+                                break
 
         print()
         for y in range(wholeSize):
