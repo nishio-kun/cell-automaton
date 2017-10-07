@@ -6,6 +6,16 @@ class Ether:
     data = ' '
 
 
+class Barrier:
+    name = 'barrier'
+    data = '+' 
+
+
+class Food:
+    name = 'food'
+    data = '@' 
+
+
 class Cell:
     name = 'newBornCell'
     x = 0
@@ -60,11 +70,6 @@ class Cell:
         mortalityRate = random.random()
         if motalityRate >= 0.6:
             field[self.y][self.x] = Ether()
-
-
-class Barrier:
-    name = 'barrier'
-    data = '+' 
 
 
 class Builder(Cell):
