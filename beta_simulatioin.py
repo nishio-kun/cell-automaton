@@ -58,13 +58,40 @@ class Cell:
 
     def die(self):
         mortalityRate = random.random()
-        if motalityRate >= 0.8:
+        if motalityRate >= 0.6:
             field[y][x] = Ether()
 
 
 class Barrier:
     name = 'barrier'
     data = '+' 
+
+
+class Builder(Cell):
+    name = 'newBornBuilder'
+
+    def grow(self):
+        self.name = 'builder'
+
+    def move_north(self):
+        if field[y - 1][x].name == 'ether':
+            field[y - 1][x] = Builder(x, y - 1, self.data) 
+            field[y][x] = Barrier()
+
+    def move_south(self):
+        if field[y + 1][x].name == 'ether':
+            field[y + 1][x] = Builder(x, y + 1, self.data) 
+            field[y][x] = Barrier()
+
+    def move_west(self):
+        if field[y][x - 1].name == 'ether':
+            field[y][x - 1] = Builder(x - 1, y, self.data) 
+            field[y][x] = Barrier()
+
+    def move_east(self):
+        if field[y][x + 1].name == 'ether':
+            field[y][x + 1] = Builder(x + 1, y, self.data) 
+            field[y][x] = Barrier()
 
 
 #make field
@@ -91,10 +118,19 @@ for y in range(wholeSize):
 while True:
     start0 = [random.randint(1, wholeSize - 2), random.randint(1, wholeSize - 2)]
     start1 = [random.randint(1, wholeSize - 2), random.randint(1, wholeSize - 2)]
+    start5 = [random.randint(1, wholeSize - 2), random.randint(1, wholeSize - 2)]
 
-    if start0 != start1:
+    #check overlap
+    startSpot = [start0, start1, start5]
+    startSpotUnique = []
+    for spot in startSpot:
+        if spot not in startSpotUnique:
+            startSpotUnique.append(spot)
+
+    if len(startSpotUnique) == 3: 
         field[start0[1]][start0[0]] = Cell(start0[0], start0[1], 0)
         field[start1[1]][start1[0]] = Cell(start1[0], start1[1], 1)
+        field[start5[1]][start5[0]] = Builder(start5[0], start5[1], 5)
         break
 
 
@@ -127,6 +163,16 @@ while True:
                         field[y][x].divide_east()
                 if field[y][x].name in ['cell', 'newBornCell']:
                     field[y][x].die
+                if field[y][x].name == 'builder':
+                    num = random.randint(0, 3)
+                    if num == 0:
+                        field[y][x].move_north()
+                    elif num == 1:
+                        field[y][x].move_south()
+                    elif num == 2:
+                        field[y][x].move_west()
+                    elif num == 3:
+                        field[y][x].move_east()
 
         print()
         for y in range(wholeSize):
@@ -138,5 +184,5 @@ while True:
 
         for y in range(wholeSize):
             for x in range(wholeSize):
-                if field[y][x].name == 'newBornCell':
+                if field[y][x].name in ['newBornCell', 'newBornBuilder']:
                     field[y][x].grow()
