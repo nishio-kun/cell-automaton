@@ -1,6 +1,7 @@
 import random
 from field import create_field, set_barrier_ether
 from initial_value import set_start_point
+from element import Barrier, Food, Cell, Builder
 
 
 # set field
@@ -16,50 +17,22 @@ set_start_point(field, wholeSize)
 
 # main
 while True:
-    print('input "s" to start')
-    print('input "o" to option')
-    print('input "q" to quit')
-    initialCommand = input()
-
-    if initialCommand == "s":
-        break
-    elif initialCommand == "o":
-        pass
-    elif initialCommand == "q":
-        break
-    else:
-        pass 
-
-while True:
     command = input('Enter or q >> ')
     if command == 'q':
         break
     else:
         for y in range(wholeSize):
             for x in range(wholeSize):
-                if field[y][x].name == 'cell':
-                    num = random.randint(0, 7)
-                    if num == 0:
-                        field[y][x].move_north(field)
-                    elif num == 1:
-                        field[y][x].move_south(field)
-                    elif num == 2:
-                        field[y][x].move_west(field)
-                    elif num == 3:
-                        field[y][x].move_east(field)
-                    elif num == 4:
-                        field[y][x].divide_north(field)
-                    elif num == 5:
-                        field[y][x].divide_south(field)
-                    elif num == 6:
-                        field[y][x].divide_west(field)
-                    elif num == 7:
-                        field[y][x].divide_east(field)
-                if field[y][x].name in ['cell', 'newBornCell']:
-                    field[y][x].die
                 if field[y][x].name == 'builder':
                     while True:
                         if 'ether' not in [field[y - 1][x].name, field[y + 1][x].name, field[y][x - 1].name, field[y][x + 1].name]:
+                            field[y][x] = Barrier()
+                            for i in range(100):
+                                rand_x = random.randint(1, wholeSize - 2)
+                                rand_y = random.randint(1, wholeSize - 2)
+                                if field[rand_y][rand_x].name == 'ether':
+                                    field[rand_y][rand_x] = Builder(rand_x, rand_y, 9)
+                                    break
                             break
                         num = random.randint(0, 3)
                         if num == 0:
@@ -78,6 +51,42 @@ while True:
                             if field[y][x + 1].name == 'ether':
                                 field[y][x].move_east(field)
                                 break
+
+                if field[y][x].name == 'cell':
+                    if field[y - 1][x].name == 'food':
+                        field[y - 1][x] = Cell(x, y - 1, field[y][x].data)
+
+                    if field[y + 1][x].name == 'food':
+                        field[y + 1][x] = Cell(x, y + 1, field[y][x].data)
+
+                    if field[y][x - 1].name == 'food':
+                        field[y][x - 1] = Cell(x - 1, y, field[y][x].data)
+
+                    if field[y][x + 1].name == 'food':
+                        field[y][x + 1] = Cell(x + 1, y, field[y][x].data)
+
+                    num = random.randint(0, 3)
+                    if num == 0:
+                        field[y][x].move_north(field)
+                    elif num == 1:
+                        field[y][x].move_south(field)
+                    elif num == 2:
+                        field[y][x].move_west(field)
+                    elif num == 3:
+                        field[y][x].move_east(field)
+
+                '''
+                if field[y][x].name in ['cell', 'newBornCell']:
+                    field[y][x].die
+                '''
+
+        if random.random() <= 0.2:
+            for i in range(100):
+                rand_x = random.randint(1, wholeSize - 2)
+                rand_y = random.randint(1, wholeSize - 2)
+                if field[rand_y][rand_x].name == 'ether':
+                    field[rand_y][rand_x] = Food()
+                    break
 
         print()
         for y in range(wholeSize):
