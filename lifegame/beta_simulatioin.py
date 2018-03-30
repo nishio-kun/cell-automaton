@@ -3,6 +3,22 @@ from field import create_field, set_barrier_ether
 from initial_value import set_start_point
 
 
+def start():
+    while True:
+        print('input "s" to start')
+        print('input "o" to option')
+        print('input "q" to quit')
+        initialCommand = input()
+        if initialCommand == "s":
+            break
+        elif initialCommand == "o":
+            pass
+        elif initialCommand == "q":
+            break
+        else:
+            pass 
+
+
 # set field
 field = create_field()
 wholeSize = len(field)
@@ -15,21 +31,6 @@ set_start_point(field, wholeSize)
 
 
 # main
-while True:
-    print('input "s" to start')
-    print('input "o" to option')
-    print('input "q" to quit')
-    initialCommand = input()
-
-    if initialCommand == "s":
-        break
-    elif initialCommand == "o":
-        pass
-    elif initialCommand == "q":
-        break
-    else:
-        pass 
-
 while True:
     command = input('Enter or q >> ')
     if command == 'q':
